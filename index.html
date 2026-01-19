@@ -14,7 +14,12 @@
     <main class="content">
       <section class="result">
         <div class="result__video-container">
-          <video src="" controls class="result__video" poster=""></video>
+          <video
+            src=""
+            controls
+            class="result__video"
+            poster=""
+          ></video>
         </div>
         <form class="search-form">
           <fieldset class="search-form__fieldset">
@@ -23,7 +28,7 @@
               <span class="search-form__label-text visually-hidden">Город</span>
               <input
                 type="text"
-                placeholder="Санкт Петербург, например"
+                placeholder="Санкт-Петербург, например"
                 name="city"
                 class="search-form__textfield"
               />
@@ -46,8 +51,9 @@
                 <input
                   type="checkbox"
                   name="time"
-                  value="afternoon"
+                  value="day"
                   class="search-form__checkbox visually-hidden"
+                  checked
                 />
                 <span class="search-form__pseudo-checkbox"></span>
                 <span class="search-form__label-text">День</span>
@@ -75,15 +81,12 @@
         </h1>
         <div class="content__list-container">
           <ul class="content__list">
-            <!-- ЗДЕСЬ ОКАЖУТСЯ ТЕМПЛЕЙТЫ КАРТОЧЕК -->
-          </ul>
+            </ul>
         </div>
       </section>
     </main>
 
-    <!-- ТЕМПЛЕЙТЫ -->
-
-    <template class="preloader-template">
+    <template class="preloader-template" id="preloader-template">
       <div class="preloader">
         <div class="preloader-chasing-squares">
           <div class="square"></div>
@@ -94,7 +97,7 @@
       </div>
     </template>
 
-    <template class="cards-list-item-template">
+    <template class="cards-list-item-template" id="cards-list-item-template">
       <li class="content__list-item">
         <a href="#0" class="content__card-link">
           <article class="content__video-card">
@@ -107,15 +110,18 @@
         </a>
       </li>
     </template>
-    <template class="more-button-template">
+
+    <template class="more-button-template" id="more-button-template">
       <button class="button more-button">Показать еще</button>
     </template>
 
-    <template class="error-template">
+    <template class="error-template" id="error-template">
       <div class="error">
         <h2 class="error__title">Из этого города нет видео :(</h2>
+        <p class="error__text">Попробуйте найти другой город.</p>
       </div>
     </template>
+
     <script src="./scripts/script.js"></script>
   </body>
 </html>
