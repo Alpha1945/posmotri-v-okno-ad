@@ -1,1 +1,1 @@
-https://github.com/Alpha1945/posmotri-v-okno-ad
+https://github.com/Alpha1945/ono-tebe-nado-ad

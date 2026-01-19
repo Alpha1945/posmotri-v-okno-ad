@@ -1,127 +1,105 @@
+/* Global styles */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-body {
+html {
+  block-size: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+li,
+blockquote,
+fieldset {
   margin: 0;
-  font-family: 'Oswald', sans-serif; 
-  background-color: #1b1919;
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 0;
 }
 
-.page {
+ul,
+ol {
+  list-style: none;
+}
+
+video {
   width: 100%;
-  padding: 20px;
 }
 
+/* Utility classes */
 
 .visually-hidden {
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
   overflow: hidden;
   clip: rect(0 0 0 0);
+  inline-size: 1px;
+  block-size: 1px;
   clip-path: inset(50%);
   white-space: nowrap;
 }
 
+/* Styles */
 
-.content {
-  display: grid;
-  grid-template-columns: 1fr 399px;
-  gap: 30px;
-  max-width: 1140px;
-  margin: 0 auto;
-  align-items: end;
+.page {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  color: #fff;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  font-size: 18px;
+  background-color: #1b1919;
+  inline-size: 1200px;
+  block-size: 100%;
 }
 
+.content {
+  display: flex;
+  gap: 30px;
+  margin: 0 30px;
+  inline-size: 100%;
+}
 
 .result {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
+  align-self: flex-end;
 }
 
 .result__video-container {
   position: relative;
-  width: 100%;
-  height: 386px;
-  background-color: #333;
+  inline-size: 711px;
+  margin: 0 0 11px;
 }
-
-.result__video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
 
 .search-form {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 40px;
 }
 
+.result__video {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 .search-form__fieldset {
-  border: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  border: none;
+  inline-size: 100%;
 }
 
 .search-form__fieldset-title {
-  font-size: 18px;
   font-weight: 400;
-  margin: 0;
-  color: #fff;
-  opacity: 0.8;
-}
-
-
-.search-form__textfield {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #fff;
-  border-top: 1px solid transparent;
-  color: #fff;
-  font-family: inherit;
-  font-size: 20px;
-  padding: 5px 0;
-  width: 225px;
-  appearance: none;
-  border-radius: 0;
-}
-
-.search-form__textfield::placeholder {
-  color: rgba(255, 255, 255, 0.7);
   font-size: 18px;
-}
-
-.search-form__textfield:focus {
-  outline: none;
-}
-
-
-.search-form__label:has(:focus-visible) {
-  outline: 1px solid #fff;
-  outline-offset: 1px;
-}
-
-
-.search-form__checkbox-list {
-  display: flex;
-  gap: 15px;
-  padding-top: 5px;
 }
 
 .search-form__label {
@@ -129,55 +107,91 @@ body {
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  width: fit-content;
 }
 
-.search-form__label:hover .search-form__label-text {
-  text-decoration: underline;
+.search-form__label:hover {
+  text-decoration: underline 1px #FFF;
+  text-underline-offset: 5px;
+}
+
+.search-form__label:has(:focus-visible) {
+  outline: 1px solid #FFF;
+  outline-offset: 1px;
+}
+
+.search-form__textfield {
+  border-top: 1px solid #FFF;
+  border-right: none;
+  border-bottom: 1px solid #FFF;
+  border-left: none;
+  padding: 2px 0;
+  color: currentColor;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  background-color: transparent;
+  inline-size: 225px;
+}
+
+.search-form__textfield::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+.search-form__textfield:active {
+  outline: 1px solid #FFF;
+}
+
+.search-form__textfield:focus {
+  outline: none;
+}
+
+.search-form__textfield:focus-visible {
+  outline: none;
+}
+
+.search-form__checkbox-list {
+  display: flex;
+  gap: 15px;
 }
 
 .search-form__pseudo-checkbox {
-  width: 19px;
-  height: 19px;
-  border: 1px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  border: 1px solid #FFF;
+  inline-size: 19px;
+  block-size: 19px;
 }
 
 .search-form__checkbox:checked + .search-form__pseudo-checkbox::after {
-  content: "";
-  width: 15px;
-  height: 15px;
-  background-color: #fff;
+  content: '';
   display: block;
+  background-color: #FFF;
+  inline-size: 15px;
+  block-size: 15px;
+  margin: 1px 0 0 1px;
 }
 
-.search-form__label-text {
-  font-size: 18px;
-}
-
-/* Кнопки */
 .button {
-  background: transparent;
-  border: 1px solid #fff;
-  color: #fff;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  text-transform: uppercase;
+  border: 1px solid #FFF;
   padding: 6px 0;
-  transition: background-color 0.2s;
+  color: #FFF;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
   text-align: center;
-}
-
-.button:hover {
-  text-decoration: underline;
+  background-color: transparent;
+  cursor: pointer;
+  inline-size: 100%;
 }
 
 .button:active {
   background-color: #545050;
+}
+
+.button:hover {
+  text-decoration: underline 1px #FFF;
 }
 
 .button:focus {
@@ -185,129 +199,103 @@ body {
 }
 
 .button:focus-visible {
-  outline: 1px solid #fff;
-  outline-offset: 2px;
+  outline: 1px solid #FFF;
+  outline-offset: 1px;
 }
 
 .search-form__submit-button {
-  width: 194px;
-  height: fit-content;
+  align-self: flex-end;
 }
 
 .content__details {
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
-  height: 100%;
+  inline-size: 100%;
 }
 
 .title {
-  font-size: 75px;
-  line-height: 0.94;
+  padding: 0 0 26px;
+  color: #FFF;
+  font-family: Oswald, sans-serif;
   font-weight: 700;
+  font-size: 75px;
+  line-height: 70.5px;
   text-transform: uppercase;
-  margin: 0;
 }
 
 .content__accent {
   color: #545050;
 }
 
-.content__list-container {
-  overflow-y: auto;
-  height: 298px;
-  position: relative;
-  /* Стили скроллбара */
-  scrollbar-width: thin;
-  scrollbar-color: #fff transparent;
-}
-
-.content__list-container::-webkit-scrollbar {
-  width: 4px;
-}
-.content__list-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-.content__list-container::-webkit-scrollbar-thumb {
-  background-color: #fff;
-}
-
+/* scrollbar-width removes scrollbar, but only works in Firefox */
+/* https://caniuse.com/?search=scrollbar-width */
 .content__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+  position: relative;
+  overflow-y: scroll;
+  block-size: 298px;
+  scrollbar-width: none;
 }
 
+/* Removes scrollbar for most other browsers */
+/* https://caniuse.com/?search=webkit-scrollbar */
+.content__list::-webkit-scrollbar {
+  display: none;
+}
 
-.content__list-item {
-  width: 100%;
-  margin: 0;
+.content__list-item:not(:last-child) {
+  margin: 0 0 34px;
 }
 
 .content__card-link {
   display: block;
-  text-decoration: none;
-  color: inherit;
   margin: 2px;
+  text-decoration: none;
+}
+
+.content__card-link:active {
+  background-color: #545050;
+}
+
+.content__card-link:hover {
+  text-decoration: underline 1px #FFF;
 }
 
 .content__card-link:focus {
   outline: none;
 }
+
 .content__card-link:focus-visible {
-  outline: 1px solid #fff;
+  outline: 1px solid #FFF;
 }
 
 .content__card-link_current {
   background-color: #545050;
 }
 
-
 .content__video-card {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 2px;
-}
-
-.content__video-card-description-container {
-  width: 200px; 
-  margin-right: 10px;
-  flex-grow: 1;
 }
 
 .content__video-card-title {
-  font-size: 30px;
+  padding: 2px 2px 5px;
+  color: #FFF;
+  font-family: Oswald, sans-serif;
   font-weight: 700;
+  font-size: 30px;
+  line-height: 1;
   text-transform: uppercase;
-  margin: 0 0 6px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  hyphens: auto;
 }
 
 .content__video-card-description {
-  font-size: 14px;
+  padding: 0 2px;
+  color: #FFF;
+  font-weight: 400;
   line-height: 16.2px;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  color: #fff;
 }
 
 .content__video-card-thumbnail {
-  width: 194px;
-  height: 103px;
+  inline-size: 194px;
+  block-size: 103px;
   object-fit: cover;
-  flex-shrink: 0; 
-}
-
-
-.more-button {
-  width: 100%;
+  object-position: center;
 }
