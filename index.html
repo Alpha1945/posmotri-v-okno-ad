@@ -21,12 +21,7 @@
             <h2 class="search-form__fieldset-title">Город</h2>
             <label class="search-form__label">
               <span class="search-form__label-text visually-hidden">Город</span>
-              <input
-                type="text"
-                placeholder="Санкт-Петербург, например"
-                name="city"
-                class="search-form__textfield"
-              />
+              <input type="text" placeholder="Санкт-Петербург, например" name="city" class="search-form__textfield" />
             </label>
           </fieldset>
           <fieldset class="search-form__fieldset">
@@ -53,28 +48,23 @@
         </form>
       </section>
       <section class="content__details">
-        <h1 class="title">
-          <span class="content__accent">По-</span><br />смотри<br />в окно
-        </h1>
+        <h1 class="title"><span class="content__accent">По-</span><br />смотри<br />в окно</h1>
         <div class="content__list-container">
           <ul class="content__list"></ul>
         </div>
       </section>
     </main>
 
-    <template id="preloader-template" data-workflow="preloader">
-      <div class="preloader" data-workflow="preloader">
+    <template data-workflow="preloader">
+      <div class="preloader">
         <div class="preloader-chasing-squares">
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
-          <div class="square"></div>
+          <div class="square"></div><div class="square"></div><div class="square"></div><div class="square"></div>
         </div>
       </div>
     </template>
 
-    <template id="card-template" data-workflow="card">
-      <li class="content__list-item" data-workflow="card">
+    <template data-workflow="card">
+      <li class="content__list-item">
         <a href="#0" class="content__card-link">
           <article class="content__video-card">
             <div class="content__video-card-description-container">
@@ -87,12 +77,12 @@
       </li>
     </template>
 
-    <template id="more-button-template" data-workflow="more-button">
-      <li data-workflow="more-button"><button class="button more-button">Показать ещё</button></li>
+    <template data-workflow="more-button">
+      <li><button class="button more-button">Показать ещё</button></li>
     </template>
 
-    <template id="error-template" data-workflow="error">
-      <div class="error" data-workflow="error">
+    <template data-workflow="error">
+      <div class="error">
         <h2 class="error__title">НЕТ ПОДХОДЯЩИХ ВИДЕО =(</h2>
       </div>
     </template>
