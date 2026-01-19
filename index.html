@@ -13,7 +13,7 @@
   <body class="page">
     <main class="content">
       <section class="result">
-        <div class="result__video-container">
+        <div class="result__video-container" data-video-container>
           <video src="" controls class="result__video" poster=""></video>
         </div>
         <form class="search-form">
@@ -23,7 +23,7 @@
               <span class="search-form__label-text visually-hidden">Город</span>
               <input
                 type="text"
-                placeholder="Санкт Петербург, например"
+                placeholder="Санкт-Петербург, например"
                 name="city"
                 class="search-form__textfield"
               />
@@ -74,14 +74,11 @@
           <span class="content__accent">По-</span><br />смотри<br />в окно
         </h1>
         <ul class="content__list">
-          <!-- ЗДЕСЬ ОКАЖУТСЯ ТЕМПЛЕЙТЫ КАРТОЧЕК -->
-        </ul>
+          </ul>
       </section>
     </main>
 
-    <!-- ТЕМПЛЕЙТЫ -->
-
-    <template class="preloader-template">
+    <template class="preloader-template" id="preloader-template" data-workflow="preloader">
       <div class="preloader">
         <div class="preloader-chasing-squares">
           <div class="square"></div>
@@ -92,7 +89,7 @@
       </div>
     </template>
 
-    <template class="cards-list-item-template">
+    <template class="cards-list-item-template" id="cards-list-item-template" data-workflow="card">
       <li class="content__list-item">
         <a href="#0" class="content__card-link">
           <article class="content__video-card">
@@ -105,15 +102,17 @@
         </a>
       </li>
     </template>
-    <template class="more-button-template">
-      <li><button class="button more-button">Показать еще</button></li>
+
+    <template class="more-button-template" id="more-button-template" data-workflow="more-button">
+      <li><button class="button more-button">Показать ещё</button></li>
     </template>
 
-    <template class="error-template">
+    <template class="error-template" id="error-template" data-workflow="error">
       <div class="error">
-        <h2 class="error__title"></h2>
+        <h2 class="error__title">НЕТ ПОДХОДЯЩИХ ВИДЕО =(</h2>
       </div>
     </template>
+
     <script src="./scripts/script.js"></script>
   </body>
 </html>
