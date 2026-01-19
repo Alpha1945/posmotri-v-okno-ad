@@ -13,13 +13,8 @@
   <body class="page">
     <main class="content">
       <section class="result">
-        <div class="result__video-container">
-          <video
-            src=""
-            controls
-            class="result__video"
-            poster=""
-          ></video>
+        <div class="result__video-container" data-video-container>
+          <video src="" controls class="result__video" poster=""></video>
         </div>
         <form class="search-form">
           <fieldset class="search-form__fieldset">
@@ -28,7 +23,7 @@
               <span class="search-form__label-text visually-hidden">Город</span>
               <input
                 type="text"
-                placeholder="Санкт-Петербург, например"
+                placeholder="Санкт Петербург, например"
                 name="city"
                 class="search-form__textfield"
               />
@@ -51,9 +46,8 @@
                 <input
                   type="checkbox"
                   name="time"
-                  value="day"
+                  value="afternoon"
                   class="search-form__checkbox visually-hidden"
-                  checked
                 />
                 <span class="search-form__pseudo-checkbox"></span>
                 <span class="search-form__label-text">День</span>
@@ -86,7 +80,7 @@
       </section>
     </main>
 
-    <template class="preloader-template" id="preloader-template">
+    <template class="preloader-template" id="preloader-template" data-workflow="preloader">
       <div class="preloader">
         <div class="preloader-chasing-squares">
           <div class="square"></div>
@@ -97,7 +91,7 @@
       </div>
     </template>
 
-    <template class="cards-list-item-template" id="cards-list-item-template">
+    <template class="cards-list-item-template" id="cards-list-item-template" data-workflow="card">
       <li class="content__list-item">
         <a href="#0" class="content__card-link">
           <article class="content__video-card">
@@ -111,14 +105,13 @@
       </li>
     </template>
 
-    <template class="more-button-template" id="more-button-template">
+    <template class="more-button-template" id="more-button-template" data-workflow="more-button">
       <button class="button more-button">Показать еще</button>
     </template>
 
-    <template class="error-template" id="error-template">
+    <template class="error-template" id="error-template" data-workflow="error">
       <div class="error">
         <h2 class="error__title">Из этого города нет видео :(</h2>
-        <p class="error__text">Попробуйте найти другой город.</p>
       </div>
     </template>
 
