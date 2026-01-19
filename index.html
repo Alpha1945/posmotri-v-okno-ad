@@ -73,12 +73,14 @@
         <h1 class="title">
           <span class="content__accent">По-</span><br />смотри<br />в окно
         </h1>
-        <ul class="content__list">
-          </ul>
+        <div class="content__list-container">
+          <ul class="content__list">
+            </ul>
+        </div>
       </section>
     </main>
 
-    <template class="preloader-template" id="preloader-template" data-workflow="preloader">
+    <template id="preloader-template" data-workflow="preloader">
       <div class="preloader">
         <div class="preloader-chasing-squares">
           <div class="square"></div>
@@ -89,7 +91,7 @@
       </div>
     </template>
 
-    <template class="cards-list-item-template" id="cards-list-item-template" data-workflow="card">
+    <template id="card-template" data-workflow="card">
       <li class="content__list-item">
         <a href="#0" class="content__card-link">
           <article class="content__video-card">
@@ -103,11 +105,11 @@
       </li>
     </template>
 
-    <template class="more-button-template" id="more-button-template" data-workflow="more-button">
+    <template id="more-button-template" data-workflow="more-button">
       <li><button class="button more-button">Показать ещё</button></li>
     </template>
 
-    <template class="error-template" id="error-template" data-workflow="error">
+    <template id="error-template" data-workflow="error">
       <div class="error">
         <h2 class="error__title">НЕТ ПОДХОДЯЩИХ ВИДЕО =(</h2>
       </div>
