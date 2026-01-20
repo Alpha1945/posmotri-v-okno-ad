@@ -5,56 +5,90 @@ const BASE_URL = 'https://v-content.practicum-team.ru';
 const endpoint = `${BASE_URL}/api/videos?pagination[pageSize]=${cardsOnPage}&`;
 
 /* ЭЛЕМЕНТЫ СТРАНИЦЫ */
-const cardsContainer = document.querySelector('.content__list');
-const videoContainer = document.querySelector('[data-video-container]');
+const cardsList = document.querySelector('.content__list');
+const cardsContainer = document.querySelector('.content__list-container');
+const videoContainer = document.querySelector('.result__video-container');
 const videoElement = document.querySelector('.result__video');
-const form = document.querySelector('.search-form');
+const form = document.querySelector('form');
 
-/* ТЕМПЛЕЙТЫ (Ищем строго по data-workflow) */
-const cardTmp = document.querySelector('[data-workflow="card"]');
-const preloaderTmp = document.querySelector('[data-workflow="preloader"]');
-const videoNotFoundTmp = document.querySelector('[data-workflow="error"]');
-const moreButtonTmp = document.querySelector('[data-workflow="more-button"]');
+/* ТЕМПЛЕЙТЫ */
+const cardTmp = document.querySelector('.cards-list-item-template');
+const preloaderTmp = document.querySelector('.preloader-template');
+const videoNotFoundTmp = document.querySelector('.error-template');
+const moreButtonTmp = document.querySelector('.more-button-template');
 
+/* МЕХАНИКА */
+
+// Нужен для работы с переключателями
 let cardsOnPageState = [];
 
-// Первая загрузка
+// Первая загрузка ✅
+
 showPreloader(preloaderTmp, videoContainer);
 showPreloader(preloaderTmp, cardsContainer);
 mainMechanics(endpoint);
 
+// осуществляется поиск ✅
 form.onsubmit = (e) => {
   e.preventDefault();
-  cardsContainer.textContent = '';
-  const errorEl = videoContainer.querySelector('.error');
-  if (errorEl) errorEl.remove();
+
+  cardsList.textContent = '';
+  const buttonInDOM = cardsContainer.querySelector('.more-button');
+  if (buttonInDOM) {
+    buttonInDOM.remove();
+  }
+
+  [...videoContainer.children].forEach((el) => {
+    el.className === 'error' && el.remove();
+  });
 
   showPreloader(preloaderTmp, videoContainer);
   showPreloader(preloaderTmp, cardsContainer);
-  
+
   const formData = serializeFormData(form);
-  const requestUrl = generateFilterRequest(endpoint, formData.city, formData.timeArray);
+  const requestUrl = generateFilterRequest(
+    endpoint,
+    formData.city,
+    formData.timeArray
+  );
+
   mainMechanics(requestUrl);
 };
 
-async function mainMechanics(url) {
+/* ФУНКЦИЯ, КОТОРАЯ ВСЕ ГЕНЕРИТ */
+
+async function mainMechanics(endpoint) {
   try {
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = await (await fetch(endpoint)).json();
     cardsOnPageState = data.results;
 
-    if (!data?.results?.[0]) throw new Error('not-found');
+    if (!data?.results?.[0]) {
+      throw new Error('not-found');
+    }
 
-    appendCards({ baseUrl: BASE_URL, dataArray: data.results, cardTmp, container: cardsContainer });
-    setVideo({ baseUrl: BASE_URL, video: videoElement, videoUrl: data.results[0].video.url, posterUrl: data.results[0].poster.url });
-    
-    const firstCard = document.querySelectorAll('.content__card-link')[0];
-    if (firstCard) firstCard.classList.add('content__card-link_current');
+    appendCards({
+      baseUrl: BASE_URL,
+      dataArray: data.results,
+      cardTmp,
+      container: cardsList,
+    });
 
+    setVideo({
+      baseUrl: BASE_URL,
+      video: videoElement,
+      videoUrl: data.results[0].video.url,
+      posterUrl: data.results[0].poster.url,
+    });
+    document
+      .querySelectorAll('.content__card-link')[0]
+      .classList.add('content__card-link_current');
     await waitForReadyVideo(videoElement);
     await delay(preloaderWaitindTime);
     removePreloader(videoContainer, '.preloader');
     removePreloader(cardsContainer, '.preloader');
+
+    // Добавляем класс для стилизации скроллбара
+    cardsContainer.classList.add('custom-scrollbar');
 
     chooseCurrentVideo({
       baseUrl: BASE_URL,
@@ -67,122 +101,190 @@ async function mainMechanics(url) {
     showMoreCards({
       dataArray: data,
       buttonTemplate: moreButtonTmp,
-      cardsContainer,
+      cardsList,
       buttonSelector: '.more-button',
-      initialEndpoint: url,
+      initialEndpoint: endpoint,
       baseUrl: BASE_URL,
       cardTmp: cardTmp,
     });
   } catch (err) {
-    removePreloader(videoContainer, '.preloader');
-    removePreloader(cardsContainer, '.preloader');
     if (err.message === 'not-found') {
       showError(videoContainer, videoNotFoundTmp, 'Нет подходящих видео =(');
     } else {
       showError(videoContainer, videoNotFoundTmp, 'Ошибка получения данных :(');
     }
+    console.log(err);
+    removePreloader(videoContainer, '.preloader');
+    removePreloader(cardsContainer, '.preloader');
   }
 }
 
 /* УТИЛИТЫ */
-async function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
-async function waitForReadyVideo(video) {
-  return new Promise((resolve) => {
-    video.oncanplaythrough = resolve;
-    if (video.readyState >= 4) resolve();
+// Простой промис, чтобы легче ставить паузу ✅
+
+async function delay(ms) {
+  return await new Promise((resolve) => {
+    return setTimeout(resolve, ms);
   });
 }
 
+// Промис, который резолвится, если видео целиком готово к проинрыванию без пауз
+
+async function waitForReadyVideo(video) {
+  return await new Promise((resolve) => {
+    video.oncanplaythrough = resolve;
+  });
+}
+
+// Устанавливает прелоадер на время загрузки данных ✅
 function showPreloader(tmp, parent) {
-  if (!tmp) return;
   const node = tmp.content.cloneNode(true);
   parent.append(node);
+  console.log('показал прелоадер');
 }
 
+// Убирает прелоадер из DOM ✅
 function removePreloader(parent, preloaderSelector) {
   const preloader = parent.querySelector(preloaderSelector);
-  if (preloader) preloader.remove();
+  if (preloader) {
+    preloader.remove();
+  }
+
+  console.log('убрал прелоадер');
 }
 
+// Добавляет карточки в контейнер, собирая их из данных API ✅
 function appendCards({ baseUrl, dataArray, cardTmp, container }) {
   dataArray.forEach((el) => {
     const node = cardTmp.content.cloneNode(true);
     node.querySelector('a').setAttribute('id', el.id);
     node.querySelector('.content__video-card-title').textContent = el.city;
-    node.querySelector('.content__video-card-description').textContent = el.description;
-    const img = node.querySelector('.content__video-card-thumbnail');
-    img.setAttribute('src', `${baseUrl}${el.thumbnail.url}`);
-    img.setAttribute('alt', el.description);
+    node.querySelector('.content__video-card-description').textContent =
+      el.description;
+    node
+      .querySelector('.content__video-card-thumbnail')
+      .setAttribute('src', `${baseUrl}${el.thumbnail.url}`);
+    node
+      .querySelector('.content__video-card-thumbnail')
+      .setAttribute('alt', el.description);
     container.append(node);
   });
+  console.log('Сгенерировал карточки');
 }
 
+// Устанавливет внужное видео в контейнер ✅
 function setVideo({ baseUrl, video, videoUrl, posterUrl }) {
   video.setAttribute('src', `${baseUrl}${videoUrl}`);
   video.setAttribute('poster', `${baseUrl}${posterUrl}`);
+  console.log('Подставил видео в основной блок');
 }
+
+// получает данные из формы и сериализует как надо ✅
 
 function serializeFormData(form) {
   const city = form.querySelector('input[name="city"]');
   const checkboxes = form.querySelectorAll('input[name="time"]');
-  const checkedValuesArray = [...checkboxes].filter(item => item.checked).map(item => item.value);
-  return { city: city.value, timeArray: checkedValuesArray };
+  const checkedValuesArray = [...checkboxes].reduce((acc, item) => {
+    item.checked && acc.push(item.value);
+    return acc;
+  }, []);
+  console.log('Собрал данные формы в объект');
+  return {
+    city: city.value,
+    timeArray: checkedValuesArray,
+  };
 }
 
+// Генерирует строку с фильтрами запросов в API в зависимости от данных из формы ✅
 function generateFilterRequest(endpoint, city, timeArray) {
-  let url = endpoint;
-  if (city) url += `filters[city][$containsi]=${city}&`;
+  if (city) {
+    endpoint += `filters[city][$containsi]=${city}&`;
+  }
   if (timeArray) {
     timeArray.forEach((timeslot) => {
-      url += `filters[time_of_day][$eqi]=${timeslot}&`;
+      endpoint += `filters[time_of_day][$eqi]=${timeslot}&`;
     });
   }
-  return url;
+  console.log('Сгенерировал строку адреса запроса в API из данных формы');
+  return endpoint;
 }
 
-function chooseCurrentVideo({ baseUrl, videoData, cardLinksSelector, currentLinkClassName, mainVideo }) {
+// переключает текущее видео ✅
+function chooseCurrentVideo({
+  baseUrl,
+  videoData,
+  cardLinksSelector,
+  currentLinkClassName,
+  mainVideo,
+}) {
   const cardsList = document.querySelectorAll(cardLinksSelector);
-  cardsList.forEach((item) => {
-    item.onclick = async (e) => {
-      e.preventDefault();
-      if (item.classList.contains(currentLinkClassName)) return;
-      cardsList.forEach((link) => link.classList.remove(currentLinkClassName));
-      item.classList.add(currentLinkClassName);
-      
-      showPreloader(preloaderTmp, videoContainer);
-      const videoObj = videoData.find((video) => String(video.id) === String(item.id));
-      setVideo({ baseUrl, video: mainVideo, videoUrl: videoObj.video.url, posterUrl: videoObj.poster.url });
-      
-      await waitForReadyVideo(mainVideo);
-      await delay(preloaderWaitindTime);
-      removePreloader(videoContainer, '.preloader');
-    };
-  });
+  if (cardsList) {
+    cardsList.forEach((item) => {
+      item.onclick = async (e) => {
+        e.preventDefault();
+        cardsList.forEach((item) => {
+          item.classList.remove(currentLinkClassName);
+        });
+        item.classList.add(currentLinkClassName);
+        showPreloader(preloaderTmp, videoContainer);
+        const vidoObj = videoData.find(
+          (video) => String(video.id) === String(item.id)
+        );
+        setVideo({
+          baseUrl,
+          video: mainVideo,
+          videoUrl: vidoObj.video.url,
+          posterUrl: vidoObj.poster.url,
+        });
+        await waitForReadyVideo(mainVideo);
+        await delay(preloaderWaitindTime);
+        removePreloader(videoContainer, '.preloader');
+        console.log('Переключил видео');
+      };
+    });
+  }
 }
 
+// вывожу интерфейс, когда видео не найдено ✅
 function showError(container, errorTemplate, errorMessage) {
   const node = errorTemplate.content.cloneNode(true);
   node.querySelector('.error__title').textContent = errorMessage;
   container.append(node);
+  console.log('показал, ошибку');
 }
 
-function showMoreCards({ dataArray, buttonTemplate, cardsContainer, buttonSelector, initialEndpoint, baseUrl, cardTmp }) {
-  if (dataArray.pagination.page >= dataArray.pagination.pageCount) return;
-  const buttonNode = buttonTemplate.content.cloneNode(true);
-  cardsContainer.append(buttonNode);
-  const buttonInDOM = cardsContainer.querySelector(buttonSelector);
+// вывожу больше видео, если в пагинации больше страниц, чем показано
 
-  buttonInDOM.onclick = async () => {
-    let nextUrl = `${initialEndpoint}pagination[page]=${dataArray.pagination.page + 1}&`;
+function showMoreCards({
+  dataArray,
+  buttonTemplate,
+  cardsList,
+  buttonSelector,
+  initialEndpoint,
+  baseUrl,
+  cardTmp,
+}) {
+  if (dataArray.pagination.page === dataArray.pagination.pageCount) return;
+  // добавить кнопку из темплейта в конец списка карточек
+  const button = buttonTemplate.content.cloneNode(true);
+  cardsContainer.append(button);
+  // Выберем добавленный элемент по селектору и добавим слушатель клика
+  const buttonInDOM = cardsContainer.querySelector(buttonSelector);
+  buttonInDOM.addEventListener('click', async () => {
+    // по клику запросим данные для следующей страницы
+    let currentPage = dataArray.pagination.page;
+    let urlToFetch = `${initialEndpoint}pagination[page]=${(currentPage += 1)}&`;
     try {
-      const response = await fetch(nextUrl);
-      const data = await response.json();
+      let data = await (await fetch(urlToFetch)).json();
       buttonInDOM.remove();
-      cardsOnPageState = [...cardsOnPageState, ...data.results];
-      appendCards({ baseUrl, dataArray: data.results, cardTmp, container: cardsContainer });
+      cardsOnPageState = cardsOnPageState.concat(data.results);
+      appendCards({
+        baseUrl,
+        dataArray: data.results,
+        cardTmp,
+        container: cardsList,
+      });
       chooseCurrentVideo({
         baseUrl: BASE_URL,
         videoData: cardsOnPageState,
@@ -190,7 +292,17 @@ function showMoreCards({ dataArray, buttonTemplate, cardsContainer, buttonSelect
         currentLinkClassName: 'content__card-link_current',
         mainVideo: videoElement,
       });
-      showMoreCards({ dataArray: data, buttonTemplate, cardsContainer, buttonSelector, initialEndpoint, baseUrl, cardTmp });
-    } catch (err) { console.error(err); }
-  };
+      showMoreCards({
+        dataArray: data,
+        buttonTemplate,
+        cardsList,
+        buttonSelector,
+        initialEndpoint,
+        baseUrl,
+        cardTmp,
+      });
+    } catch (err) {
+      return err;
+    }
+  });
 }
